@@ -1,5 +1,7 @@
 <?php
-include 'config.php';
+session_start();
+// Connexion à la base de données
+$pdo = new PDO('mysql:host=localhost;dbname=livreor;charset=utf8', 'root', ''); 
 
 if ($_POST) {
     $login = $_POST['login'];
@@ -27,10 +29,11 @@ if ($_POST) {
     <title>Connexion</title>
     <link rel="stylesheet" href="style.css">
 </head>
-<bo dy>
+<body>
     <nav>
         <a href="index.php">Accueil</a>
         <a href="inscription.php">Inscription</a>
+        
     </nav>
     <div class="container">
         <h2>Connexion</h2>

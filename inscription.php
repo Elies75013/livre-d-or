@@ -1,5 +1,6 @@
 <?php 
-include 'config.php'; 
+// Connexion à la base de données
+$pdo = new PDO('mysql:host=localhost;dbname=livreor;charset=utf8', 'root', '');
 
 if ($_POST) {
     $login = $_POST['login'];
@@ -8,13 +9,16 @@ if ($_POST) {
     $password = $_POST['password'];
     $confirm = $_POST['confirm'];
     
-    if ($password == $confirm) {
+    // Vérifier si le login existe déjà
+    $stmt = $pdo->prepare("SELECT id FROM utilisateurs WHERE login = ?");
+    $stmt->execute([$login]);
+    if ($stmt->fetch()) {
+        $erreur = "Ce login existe déjà.";
+    } elseif ($password == $confirm) {
         $password_hash = password_hash($password, PASSWORD_DEFAULT);
-        
         $sql = "INSERT INTO utilisateurs (login, prenom, nom, password) VALUES (?, ?, ?, ?)";
         $stmt = $pdo->prepare($sql);
         $stmt->execute([$login, $prenom, $nom, $password_hash]);
-        
         header("Location: connexion.php");
         exit;
     } else {
